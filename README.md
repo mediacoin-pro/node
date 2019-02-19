@@ -1,0 +1,2 @@
+# mdcnode
+Mediacoin blockchain node
