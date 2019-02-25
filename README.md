@@ -67,10 +67,32 @@ GET /address/0x<userID:hex>
 GET /address/?address=<address> 
 ```
 
+##### Generate address with Memo 
+``` 
+GET /address/?address&memo  
+```
+
 ##### Get address info + memo code 
 ``` 
 GET /address/?address=<address>&memo=<memo> 
 ```
+
+##### Get transaction list by address (+memo)
+``` 
+GET /txs/?address=<address> [&memo=<num|hex>] [&limit=<int>] [&order="asc"|"desc"] [&offset=<hex>]
+```
+
+##### Generate new key pair, address by secret-phrase
+``` 
+GET /new-key?seed=<secret_phrase>
+```
+
+##### Register user in blockchain
+``` 
+GET /new-user?login=<login>&password=<password>
+```
+
+
 
 
 

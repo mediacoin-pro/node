@@ -62,7 +62,8 @@ var (
 	reTxHash          = regexp.MustCompile(`^/tx/([a-f0-9]{64})$`)
 	reTxID            = regexp.MustCompile(`^/tx/([a-f0-9]{1,16})$`)
 
-	err404 = errors.New("404 - Not found")
+	err404        = errors.New("404 - Not found")
+	errUserExists = errors.New("400 - User exists")
 )
 
 func (c *Context) Exec() {
@@ -133,13 +134,23 @@ func (c *Context) Exec() {
 
 	case c.uriPath == "/new-user":
 		prv := c.getPrivateKey()          // private key OR seed
-		nick := c.getStr("nick", "")      // user nickname
+		nick := c.getStr("login", "")     // user nickname
 		referrerID := c.getUint("ref_id") // referral id
 
+		user, err := c.bc.UserByNick(nick)
+		c.assert(err)
+		if user != nil {
+			if user.PublicKey().Equal(prv.PublicKey()) {
+				c.WriteVar(user.Tx(), err)
+			} else {
+				c.WriteError(errUserExists, http.StatusBadRequest)
+			}
+			return
+		}
 		tx := txobj.NewUser(c.bc, prv, nick, referrerID)
 		c.assert(tx.Verify(c.bc.Cfg))
 
-		err := c.bc.Mempool.Put(tx)
+		err = c.bc.Mempool.Put(tx)
 		c.WriteVar(tx, err)
 
 	case c.uriPath == "/new-key":
@@ -157,7 +168,7 @@ func (c *Context) Exec() {
 		})
 
 	default:
-		c.WriteError(err404, 404)
+		c.WriteError(err404, http.StatusNotFound)
 	}
 
 	return
