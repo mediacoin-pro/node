@@ -225,7 +225,7 @@ func (c *Context) getPrivateKey() *crypto.PrivateKey {
 }
 
 func (c *Context) getOrderDesc() bool {
-	return c.getStr("order", "desc") == "desc"
+	return c.getStr("order", "asc") == "desc"
 }
 
 func (c *Context) getAmount(name string) (n bignum.Int) {
