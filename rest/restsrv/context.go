@@ -36,10 +36,15 @@ func newContext(
 	req *http.Request,
 	rw http.ResponseWriter,
 ) *Context {
+	path := req.URL.Path
+	path = strings.TrimPrefix(path, "/rest")
+	if path != "/" {
+		path = strings.TrimSuffix(path, "/")
+	}
 	return &Context{
 		Server:   srv,
 		req:      req,
-		uriPath:  strings.TrimPrefix(req.URL.Path, "/rest"),
+		uriPath:  path,
 		reqQuery: req.URL.Query(),
 		reqBody:  bin.NewReader(req.Body),
 		rw:       rw,
@@ -67,10 +72,12 @@ func (c *Context) Exec() {
 	case c.uriPath == "/info":
 		c.WriteVar(c.bc.Info())
 
+		//	/block/<block-num>
 	case c.matchPath(rePathBlockNum):
 		num, _ := strconv.ParseUint(c.uriParts[1], 10, 64)
 		c.WriteVar(c.bc.GetBlock(num))
 
+		//	/blocks?offset=<block-num>&limit=<count-blocks>
 	case c.uriPath == "/blocks":
 		offset := c.getUint("offset")
 		limit := c.getLimit()
