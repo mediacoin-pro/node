@@ -94,17 +94,18 @@ func (c *Context) Exec() {
 		txID, _ := strconv.ParseUint(c.uriParts[1], 16, 64)
 		c.WriteVar(c.bc.TransactionByID(txID))
 
+		//	/address/?address=MDC&memo=...
 	case c.uriPath == "/address":
-		addr, memo := c.getAddress()
+		addr, memo := c.getAddress("")
 		c.WriteVar(c.bc.AddressInfo(addr, memo, assets.MDC))
 
 		//	/address/MDCxxxxxxxxxxxxx
 	case c.matchPath(rePathAddressInfo):
-		addr, memo, _ := c.bc.AddressByStr(c.uriParts[1])
+		addr, memo := c.getAddress(c.uriParts[1])
 		c.WriteVar(c.bc.AddressInfo(addr, memo, assets.MDC))
 
 	case c.uriPath == "/txs":
-		addr, memo := c.getAddress()
+		addr, memo := c.getAddress("")
 		offset := c.getUint("offset")
 		limit := c.getLimit()
 		orderDesc := c.getOrderDesc()
@@ -119,7 +120,7 @@ func (c *Context) Exec() {
 
 	case c.uriPath == "/new-transfer":
 		prvKey := c.getPrivateKey()        // private key OR seed
-		toAddr, toMemo := c.getAddress()   // address
+		toAddr, toMemo := c.getAddress("") // address
 		amount := c.getAmount("amount")    // amount
 		comment := c.getStr("comment", "") // comment
 		asset := assets.MDC                //
@@ -190,8 +191,8 @@ func (c *Context) getLimit() (limit int64) {
 	return
 }
 
-func (c *Context) getAddress() (addr []byte, memo uint64) {
-	addr, memo, err := crypto.DecodeAddress(c.getStr("address", ""))
+func (c *Context) getAddress(defaultValue string) (addr []byte, memo uint64) {
+	addr, memo, err := c.bc.AddressByStr(c.getStr("address", defaultValue))
 	c.assert(err)
 	if s := c.getStr("memo", ""); s != "" {
 		memo, err = strconv.ParseUint(s, 0, 64)
