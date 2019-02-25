@@ -17,7 +17,7 @@ follow the installation instructions: https://golang.org/doc/install
 
 ##### Install or update node 
 ``` shell
-go get -u -v github.com/mediacoin-pro/node/
+go get -u -v github.com/mediacoin-pro/node/cmd/mdcnode
 go build -o mdcnode github.com/mediacoin-pro/node/cmd/mdcnode
 ``` 
 
