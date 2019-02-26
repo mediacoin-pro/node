@@ -89,10 +89,11 @@ GET /new-key?seed=<secret_phrase>
 
 ##### Register user in blockchain
 ``` 
-GET /new-user?login=<login>&password=<password>
+POST /new-user?login=<login>&password=<password>
 ```
 
-
-
-
+##### Transfer founds to address
+``` 
+POST /new-transfer? &(seed|login&password|private) &address=<address> [&memo=<num|hex>] &amount=<num> [&comment] [&nonce=<num|hex>] 
+```
 
