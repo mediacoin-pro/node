@@ -127,10 +127,11 @@ func (c *Context) Exec() {
 		prvKey := c.getPrivateKey()        // private key OR seed
 		toAddr, toMemo := c.getAddress("") // address
 		amount := c.getAmount("amount")    // amount
-		comment := c.getStr("comment", "") // comment
+		comment := c.getStr("comment", "") // comment (by default "")
+		nonce := c.getNonce()              // nonce (by default 0)
 		asset := assets.MDC                //
 
-		tx := txobj.NewSimpleTransfer(c.bc, prvKey, asset, amount, 0, toAddr, toMemo, comment, 0)
+		tx := txobj.NewSimpleTransfer(c.bc, prvKey, asset, amount, 0, toAddr, toMemo, comment, nonce)
 		c.assert(tx.Verify(c.bc.Cfg))
 
 		err := c.bc.Mempool.Put(tx)
@@ -236,6 +237,12 @@ func (c *Context) getAmount(name string) (n bignum.Int) {
 	v, err := strconv.ParseUint(c.getStr(name, "0"), 10, 64)
 	c.assert(err)
 	return bignum.NewInt(int64(v))
+}
+
+func (c *Context) getNonce() (n uint64) {
+	n, err := strconv.ParseUint(c.getStr("nonce", "0"), 0, 64)
+	c.assert(err)
+	return
 }
 
 func (c *Context) getStr(name, defaultValue string) string {
