@@ -130,7 +130,7 @@ func (c *Context) Exec() {
 		comment := c.getStr("comment", "") // comment
 		asset := assets.MDC                //
 
-		tx := txobj.NewSimpleTransfer(c.bc, prvKey, asset, amount, 0, toAddr, toMemo, comment)
+		tx := txobj.NewSimpleTransfer(c.bc, prvKey, asset, amount, 0, toAddr, toMemo, comment, 0)
 		c.assert(tx.Verify(c.bc.Cfg))
 
 		err := c.bc.Mempool.Put(tx)
