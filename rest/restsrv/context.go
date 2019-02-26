@@ -41,7 +41,7 @@ func newContext(
 	if path != "/" {
 		path = strings.TrimSuffix(path, "/")
 	}
-	return &Context{
+	c := &Context{
 		Server:   srv,
 		req:      req,
 		uriPath:  path,
@@ -49,6 +49,10 @@ func newContext(
 		reqBody:  bin.NewReader(req.Body),
 		rw:       rw,
 	}
+	if (req.Method == "POST" || req.Method == "PUT") && req.ParseForm() == nil {
+		c.reqQuery = req.Form
+	}
+	return c
 }
 
 const (
