@@ -131,7 +131,7 @@ func (c *Context) Exec() {
 		nonce := c.getNonce()              // nonce (by default 0)
 		asset := assets.MDC                //
 
-		tx := txobj.NewSimpleTransfer(c.bc, prvKey, asset, amount, 0, toAddr, toMemo, comment, nonce)
+		tx := txobj.NewSimpleTransfer(c.bc, nil, prvKey, asset, amount, 0, toAddr, toMemo, comment, nonce)
 		c.assert(tx.Verify(c.bc.Cfg))
 
 		err := c.bc.Mempool.Put(tx)
