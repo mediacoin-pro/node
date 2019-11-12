@@ -132,7 +132,7 @@ func (c *Context) Exec() {
 		asset := assets.MDC                //
 
 		tx := txobj.NewSimpleTransfer(c.bc, nil, prvKey, asset, amount, 0, toAddr, toMemo, comment, nonce)
-		c.assert(tx.Verify(c.bc.Cfg))
+		c.assert(tx.Verify())
 
 		err := c.bc.Mempool.Put(tx)
 		c.WriteVar(tx, err)
@@ -153,7 +153,7 @@ func (c *Context) Exec() {
 			return
 		}
 		tx := txobj.NewUser(c.bc, prv, nick, referrerID)
-		c.assert(tx.Verify(c.bc.Cfg))
+		c.assert(tx.Verify())
 
 		err = c.bc.Mempool.Put(tx)
 		c.WriteVar(tx, err)
