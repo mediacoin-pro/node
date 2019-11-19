@@ -30,13 +30,13 @@ go build -o mdcnode github.com/mediacoin-pro/node/cmd/mdcnode
 
 ## Start Node
 ``` shell
-nohup ./mdcnode -http=127.0.0.1:8888 -dir=$HOME/mdc </dev/null >/var/log/mdcnode.log 2>&1 &
+nohup ./mdcnode -http=127.0.0.1:8777 -dir=$HOME/mdc </dev/null >/var/log/mdcnode.log 2>&1 &
 ``` 
 
 
 ## Node REST API
 ``` 
-http://127.0.0.1:8888/<command>? [&pretty] &<param>=<value>.... 
+http://127.0.0.1:8777/<command>? [&pretty] &<param>=<value>.... 
 ```
 
 ##### Get general node and blockchain information
