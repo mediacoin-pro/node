@@ -38,7 +38,9 @@ func (c *Client) httpPut(path string, req interface{}) (err error) {
 }
 
 func (c *Client) httpRequest(method, path string, reqObj, resObj interface{}) (err error) {
-	xlog.Trace.Printf("rest> http-req: %s %s ...", method, c.apiAddr+path)
+	if xlog.TraceIsOn() {
+		xlog.Trace.Printf("rest> http-req: %s %s ...", method, c.apiAddr+path)
+	}
 	req, err := http.NewRequest(method, c.apiAddr+path, nil)
 	if reqObj != nil {
 		req.Body = bin.NewBuffer(nil, reqObj)
@@ -55,8 +57,9 @@ func (c *Client) httpRequest(method, path string, reqObj, resObj interface{}) (e
 	}
 	defer resp.Body.Close()
 
-	xlog.Trace.Printf("rest> http-resp-code: %d", resp.StatusCode)
-
+	if xlog.TraceIsOn() {
+		xlog.Trace.Printf("rest> http-resp-code: %d", resp.StatusCode)
+	}
 	if resp.StatusCode != 200 {
 		res, _ := ioutil.ReadAll(resp.Body)
 		return errors.New(string(res))
