@@ -15,7 +15,7 @@ type Client struct {
 	apiAddr string
 }
 
-const DefaultAPIAddress = "https://mediacoin.pro/rest"
+const DefaultAPIAddress = "https://rest.mediacoin.pro/"
 
 func NewClient(apiAddr string) *Client {
 	if apiAddr == "" {
