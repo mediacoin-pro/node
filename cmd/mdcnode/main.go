@@ -12,7 +12,7 @@ import (
 	"github.com/mediacoin-pro/node/rest/restsrv"
 )
 
-const applicationName = "Mediacoin Blockchain Node v1.2"
+const applicationName = "Mediacoin Blockchain Node v1.3"
 
 func main() {
 	var (
